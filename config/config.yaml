@@ -1,0 +1,195 @@
+# Telegram Trading Bot Configuration
+
+# Trading Configuration
+trading:
+  target_pairs:
+    major_pairs:
+      - "EURUSD"
+      - "GBPUSD" 
+      - "USDJPY"
+      - "USDCHF"
+      - "AUDUSD"
+      - "USDCAD"
+      - "NZDUSD"
+    commodities:
+      - "XAUUSD"  # Gold
+    crypto:
+      - "BTCUSDT"
+      - "ETHUSDT"
+      - "ADAUSDT"
+      - "DOTUSDT"
+      
+  # Target profit parameters
+  target_pips: 
+    min: 50
+    max: 80
+    
+  # Risk management
+  risk_management:
+    max_risk_per_trade: 2.0  # % of account
+    max_daily_trades: 3
+    stop_loss_pips: 30
+    take_profit_multiplier: 2.5  # Risk:Reward ratio
+    
+  # Signal generation
+  signals:
+    max_signals_per_day: 3
+    min_confluence_score: 70  # Minimum confluence percentage
+    secondary_signal_delay: 4  # hours after primary signal
+    
+# Strategy Configuration
+strategy:
+  # Technical indicators and their weights
+  indicators:
+    rsi:
+      enabled: true
+      weight: 15
+      overbought: 70
+      oversold: 30
+      
+    macd:
+      enabled: true
+      weight: 20
+      fast_period: 12
+      slow_period: 26
+      signal_period: 9
+      
+    bollinger_bands:
+      enabled: true
+      weight: 15
+      period: 20
+      std_dev: 2
+      
+    support_resistance:
+      enabled: true
+      weight: 25
+      lookback_periods: 50
+      
+    fibonacci_retracements:
+      enabled: true
+      weight: 15
+      key_levels: [0.382, 0.5, 0.618]
+      
+    volume_analysis:
+      enabled: true
+      weight: 10
+      
+  # Adaptive strategy parameters
+  adaptation:
+    no_signal_threshold_days: 3  # Days before strategy adaptation
+    backtest_period_days: 30
+    min_win_rate: 60  # Minimum acceptable win rate %
+    performance_review_hours: 24
+    
+  # Multiple strategy framework
+  strategies:
+    - name: "trend_following"
+      enabled: true
+      weight: 40
+      indicators: ["macd", "support_resistance", "volume_analysis"]
+      
+    - name: "mean_reversion"
+      enabled: true
+      weight: 30
+      indicators: ["rsi", "bollinger_bands"]
+      
+    - name: "breakout"
+      enabled: true
+      weight: 30
+      indicators: ["support_resistance", "volume_analysis", "fibonacci_retracements"]
+
+# Market Data Configuration
+market_data:
+  # Data sources with failover priority
+  sources:
+    primary: "alpha_vantage"
+    secondary: "bybit"    # For crypto
+    tertiary: "oanda"     # For forex
+    
+  # Update intervals
+  intervals:
+    live_data: 60        # seconds
+    historical_data: 300 # seconds (5 minutes)
+    
+  # Timeframes for analysis
+  timeframes:
+    - "1m"   # 1 minute
+    - "5m"   # 5 minutes  
+    - "15m"  # 15 minutes
+    - "1h"   # 1 hour
+    - "4h"   # 4 hours
+    - "1d"   # 1 day
+    
+# Telegram Bot Configuration
+telegram:
+  # Bot behavior
+  send_signals: true
+  send_reports: true
+  confirm_trades: true
+  secondary_signals: true
+  
+  # Message formatting
+  use_emojis: true
+  include_charts: true
+  
+  # Notification timing
+  signal_send_times: ["09:00", "13:00", "17:00"]  # UTC times
+  daily_report_time: "08:00"
+  weekly_report_day: "sunday"
+  weekly_report_time: "10:00"
+
+# Reporting Configuration  
+reporting:
+  # Report types
+  daily_report: true
+  weekly_report: true
+  monthly_summary: true
+  
+  # Metrics to track
+  metrics:
+    - "total_signals_sent"
+    - "trades_taken"
+    - "trades_won"
+    - "trades_lost"
+    - "total_pips"
+    - "daily_pnl"
+    - "weekly_pnl" 
+    - "win_rate"
+    - "avg_risk_reward"
+    - "strategy_performance"
+    
+# Database Configuration
+database:
+  # Connection settings (overridden by DATABASE_URL env var)
+  pool_size: 10
+  max_overflow: 20
+  pool_timeout: 30
+  
+  # Table retention
+  data_retention_days: 365
+  log_retention_days: 30
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Log files
+  files:
+    main: "logs/bot.log"
+    trades: "logs/trades.log"
+    errors: "logs/errors.log"
+    
+  # Rotation
+  max_file_size: "10MB"
+  backup_count: 5
+
+# Environment Settings
+environment:
+  production:
+    debug: false
+    log_level: "INFO"
+    
+  development:
+    debug: true
+    log_level: "DEBUG"
