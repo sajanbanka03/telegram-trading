@@ -1,4 +1,4 @@
-# Core Dependencies for Render Deployment
+# Essential dependencies only - compatible with Python 3.11
 python-telegram-bot==20.7
 asyncpg==0.29.0
 sqlalchemy[asyncio]==2.0.23
@@ -10,7 +10,5 @@ flask==3.0.0
 pyyaml==6.0.1
 python-dotenv==1.0.0
 structlog==23.2.0
-pandas==2.1.4
-numpy==1.25.2
 psycopg2-binary==2.9.10
 pycryptodome==3.23.0
